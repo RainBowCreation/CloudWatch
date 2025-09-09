@@ -3,7 +3,9 @@
 
 Support 1.20.1+ java 17+ | Multipaper supported!
 
- Requires the [Systems Manager](https://aws.amazon.com/systems-manager/) agent to have a role with the `cloudwatch:PutMetricData` [permission](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/permissions-reference-cw.html). This plugin is designed for Unix Operating Systems, such as Linux, and some statistics may not be recorded on other operating systems.
+ Requires the [Systems Manager](https://aws.amazon.com/systems-manager/) agent to have a role with the `cloudwatch:PutMetricData` [permission](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/permissions-reference-cw.html)
+ 
+ This plugin is designed for Unix Operating Systems, such as Linux, and some statistics may not be recorded on other operating systems.
 
  ## Java Statistics
  All Java statistics collected are per minute and represent the current value or the count/total time during that period.
@@ -45,3 +47,27 @@ Support 1.20.1+ java 17+ | Multipaper supported!
 - Number of Projectiles Launched
 - Number of Structures Grown
 - Number of Trades Selected
+
+## Autoscaling support: Auto draining
+
+``System manager`` will need an inline policy for automatic draining player support
+ ```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetParameter",
+                "ssm:DeleteParameter"
+            ],
+            "Resource": "arn:aws:ssm:*:*:parameter/minecraft/drain/*"
+        }
+    ]
+}
+```
+for draining player fire a lampda fuction that put parameter ``/minecraft/drain/<instance_id>`` to ``true`` and server will start draining people (kick) and automatically shutdown (minecraft server)
+```
+name = f"/minecraft/drain/{instance_id.strip()}"
+ssm.put_parameter(Name=name, Value=value_str, Type="String", Overwrite=True)
+```
