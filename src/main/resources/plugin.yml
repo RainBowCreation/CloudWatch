@@ -6,3 +6,13 @@ depend: []
 api-version: 1.20
 
 main: github.metalshark.cloudwatch.CloudWatch
+
+commands:
+  drainnow:
+    description: Kick all players and stop the server for scale-in
+    usage: /drainnow
+    permission: cloudwatch.drain
+permissions:
+  cloudwatch.drain:
+    description: Allows using /drainnow
+    default: op

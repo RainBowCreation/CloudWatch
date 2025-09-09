@@ -164,6 +164,12 @@
             <artifactId>cloudwatch</artifactId>
         </dependency>
 
+        <!-- AWS SSM -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>ssm</artifactId>
+        </dependency>
+
         <!-- Bukkit -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
