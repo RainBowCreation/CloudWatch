@@ -31,6 +31,9 @@ public class DrainFlagPoller implements Runnable {
                     .name(paramName).withDecryption(false).build());
             String v = resp.parameter().value();
             if ("true".equalsIgnoreCase(v.trim())) {
+                try {
+                    ssm.deleteParameter(r -> r.name(paramName));
+                } catch (Exception ignored) {}
                 // fire drain
                 DrainManager.drainAndShutdown(
                         "Server is scaling in; kicking players in {seconds}s…",
