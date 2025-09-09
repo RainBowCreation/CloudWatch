@@ -6,7 +6,7 @@
 
     <groupId>github.metalshark.cloudwatch</groupId>
     <artifactId>CloudWatch</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <name>CloudWatch</name>
     <description>CloudWatch statistic logging for Minecraft Servers.</description>
@@ -18,7 +18,7 @@
         <!-- Used in plugin.yml -->
         <mainClass>${project.groupId}.${project.artifactId}</mainClass>
         <!-- Also used in plugin.yml -->
-        <author>metalshark</author>
+        <author>RainBowCreation</author>
     </properties>
 
     <licenses>
@@ -91,6 +91,28 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.0</version> <!-- Make sure to always use the latest version (https://maven.apache.org/plugins/maven-shade-plugin/) -->
+                <configuration>
+                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.github.puregero.multilib</pattern>
+                            <shadedPattern>net.rainbowcreation.multilib</shadedPattern> <!-- Replace this -->
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -106,6 +128,18 @@
         <repository>
             <id>mvn-central</id>
             <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+
+        <!-- paper -->
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+
+        <!-- multipaper -->
+        <repository>
+            <id>clojars</id>
+            <url>https://repo.clojars.org</url>
         </repository>
 
     </repositories>
@@ -132,9 +166,9 @@
 
         <!-- Bukkit -->
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -142,8 +176,16 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>1.18.40</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- multipaper -->
+        <dependency>
+            <groupId>com.github.puregero</groupId>
+            <artifactId>multilib</artifactId>
+            <version>1.2.5</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

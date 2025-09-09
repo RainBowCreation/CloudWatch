@@ -3,6 +3,6 @@ version: ${project.version}
 description: ${project.description}
 author: ${author}
 depend: []
-api-version: 1.13
+api-version: 1.20
 
-main: ${mainClass}
+main: github.metalshark.cloudwatch.CloudWatch

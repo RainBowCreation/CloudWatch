@@ -1,5 +1,6 @@
 package github.metalshark.cloudwatch;
 
+import com.github.puregero.multilib.MultiLib;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import github.metalshark.cloudwatch.listeners.*;
 import github.metalshark.cloudwatch.runnables.JavaStatisticsRunnable;
@@ -14,6 +15,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.slf4j.LoggerFactory;
 import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.regions.internal.util.EC2MetadataUtils;
 import software.amazon.awssdk.services.cloudwatch.model.Dimension;
@@ -22,6 +24,8 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 public class CloudWatch extends JavaPlugin {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(CloudWatch.class);
+    public static final boolean IsMultipaper = MultiLib.isMultiPaper();
 
     @Getter
     private ChunkLoadListener chunkLoadListener = new ChunkLoadListener();
@@ -56,6 +60,7 @@ public class CloudWatch extends JavaPlugin {
                 .name("Per-Instance Metrics")
                 .value(EC2MetadataUtils.getInstanceId())
                 .build();
+            getLogger().info("CloudWatch initiate..");
         } catch (SdkClientException exception) {
             getLogger().warning("The CloudWatch plugin only works on EC2 instances.");
             this.setEnabled(false);
@@ -63,6 +68,10 @@ public class CloudWatch extends JavaPlugin {
         }
 
         final PluginManager pluginManager = Bukkit.getPluginManager();
+
+        if (IsMultipaper) {
+            getLogger().info("Multipaper detected.");
+        }
 
         pluginManager.registerEvents(chunkLoadListener.init(), this);
         pluginManager.registerEvents(playerJoinListener, this);
@@ -95,6 +104,7 @@ public class CloudWatch extends JavaPlugin {
         minecraftStatisticsExecutor.scheduleAtFixedRate(new MinecraftStatisticsRunnable(), 0, 1, TimeUnit.MINUTES);
 
         Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(this, tickRunnable, 1, 1);
+        getLogger().info("enabled.");
     }
 
     @Override

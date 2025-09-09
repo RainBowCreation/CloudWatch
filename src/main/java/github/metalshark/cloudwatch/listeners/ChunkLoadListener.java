@@ -1,6 +1,7 @@
 package github.metalshark.cloudwatch.listeners;
 
-import lombok.Getter;
+import com.github.puregero.multilib.MultiLib;
+import github.metalshark.cloudwatch.CloudWatch;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,10 @@ public class ChunkLoadListener implements Listener {
     @EventHandler(priority=EventPriority.MONITOR)
     @SuppressWarnings("unused")
     public void onChunkLoad(ChunkLoadEvent event) {
+        if (CloudWatch.IsMultipaper) {
+            if (!MultiLib.isChunkLocal(event.getChunk()))
+                return;
+        }
         count++;
         if (count > max) max = count;
     }
@@ -31,6 +36,10 @@ public class ChunkLoadListener implements Listener {
     @EventHandler(priority=EventPriority.MONITOR)
     @SuppressWarnings("unused")
     public void onChunkUnload(ChunkUnloadEvent event) {
+        if (CloudWatch.IsMultipaper) {
+            if (!MultiLib.isChunkLocal(event.getChunk()))
+                return;
+        }
         count--;
     }
 

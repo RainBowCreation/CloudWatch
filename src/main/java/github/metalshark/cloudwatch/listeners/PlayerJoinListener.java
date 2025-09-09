@@ -1,5 +1,7 @@
 package github.metalshark.cloudwatch.listeners;
 
+import com.github.puregero.multilib.MultiLib;
+import github.metalshark.cloudwatch.CloudWatch;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,6 +15,10 @@ public class PlayerJoinListener implements Listener {
     @EventHandler(priority=EventPriority.MONITOR)
     @SuppressWarnings("unused")
     public void onPlayerJoin(PlayerJoinEvent event) {
+        if (CloudWatch.IsMultipaper) {
+            if (!MultiLib.isLocalPlayer(event.getPlayer()))
+                return;
+        }
         final double onlinePlayers = Bukkit.getOnlinePlayers().size();
         if (onlinePlayers > maxOnlinePlayers) maxOnlinePlayers = onlinePlayers;
     }
